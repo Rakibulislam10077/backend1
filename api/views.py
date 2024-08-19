@@ -1,48 +1,99 @@
-from django.shortcuts import render
+# from django.shortcuts import render
 from . models import Students 
 from .serializers import StudentSerializer
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
 # Create your views here.
-
-@api_view(['GET', "POST", "PUT", "PATCH"])
-def student_create(request, pk=None):
-    if request.method == "GET":
-        id = pk
-        if id is not None:
-            st = Students.objects.get(id=id)
-            serializer = StudentSerializer(st)
-            return Response(serializer.data)
-        st = Students.objects.all()
-        serializer = StudentSerializer(st, many=True)
-        return Response(serializer.data)
-
-    if request.method == 'POST':
-        serializer = StudentSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            response = {'message': 'student created successfully'}
-            return Response(response)
-        return Response(serializer.errors)
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
+class students(GenericAPIView, ListModelMixin):
+    queryset = Students.objects.all()
+    serializer_class = StudentSerializer
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 
-    if request.method == "PUT":
-        id = pk
-        st = Students.objects.get(id=id)
-        serializer = StudentSerializer(st, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return(Response({'message':'student updated successfully'}))
-        return(Response(serializer.errors))
+class studentsCreate(GenericAPIView, CreateModelMixin):
+    queryset = Students.objects.all()
+    serializer_class = StudentSerializer
+    
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+    
+    
+class studentGetById(GenericAPIView, RetrieveModelMixin):
+    queryset = Students.objects.all()
+    serializer_class = StudentSerializer
+    
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
+    
+    
+class studentGetById(GenericAPIView, UpdateModelMixin):
+    queryset = Students.objects.all()
+    serializer_class = StudentSerializer
+    
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+
+
+class studentGetById(GenericAPIView, DestroyModelMixin):
+    queryset = Students.objects.all()
+    serializer_class = StudentSerializer
+    
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+    
+    
+    
+# class student_create(APIView):
+#     def get(self, request, pk=None, format=None):
+#         id = pk
+#         if id is not None:
+#             st = Students.objects.get(id=id)
+#             serializer = StudentSerializer(st)
+#             return Response(serializer.data)
+#         st = Students.objects.all()
+#         serializer = StudentSerializer(st, many=True)
+#         return Response(serializer.data)
+
+#     def post(self, request, format=None):
+#         serializer = StudentSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             response = {'message': 'student created successfully'}
+#             return Response(response)
+#         return Response(serializer.errors)
+
+
+#     def put(self, request, pk, format=None):
+#         id = pk
+#         st = Students.objects.get(id=id)
+#         serializer = StudentSerializer(st, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return(Response({'message':'student updated successfully'}))
+#         return(Response(serializer.errors))
         
-    if request.method == "PATCH":
-        id = pk
-        st = Students.objects.get(id=id)
-        serializer = StudentSerializer(st, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return(Response({'message':'partial student updated successfully'}))
-        return(Response(serializer.errors))
+#     def patch(self, request, pk, format=None):
+#         id = pk
+#         st = Students.objects.get(id=id)
+#         serializer = StudentSerializer(st, data=request.data, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return(Response({'message':'partial student updated successfully'}))
+#         return(Response(serializer.errors))
+    
+    
+#     def delete(self,request, pk=None,format=None):
+#         id = pk
+#         st = Students.objects.get(id=id)
+#         st.delete()
+#         return Response({'message': 'Student delete successfully'})
         
 
 # def students(request):

@@ -5,7 +5,7 @@ from . models import Students
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Students
-        fields = ['name', 'roll', 'address', 'phone', 'email', 'image']
+        fields = ['id','name', 'roll', 'address', 'phone', 'email', 'image']
 
 # class StudentSerializer(serializers.Serializer):
 #     name = serializers.CharField(max_length=30)

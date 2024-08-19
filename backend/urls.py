@@ -23,9 +23,9 @@ from api import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('students/', views.student_create),
-    path('getStudentById/<int:pk>/', views.student_create),
-    # path('studentCreate/', views.create_student)
+    path('', views.students.as_view(), name='stList'),
+    path('student_create/', views.studentsCreate.as_view(), name='stCreate'),
+    path('getStudentById/<int:pk>/', views.studentGetById.as_view(), name='stGet'),
 ]
 
 
